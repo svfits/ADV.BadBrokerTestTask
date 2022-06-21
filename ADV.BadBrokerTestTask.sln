@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32414.318
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADV.BadBrokerTestTask", "ADV.BadBrokerTestTask\ADV.BadBrokerTestTask.csproj", "{8C70DA01-6F4C-46B6-BC9C-993928F39150}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADV.BadBroker.WebService", "ADV.BadBrokerTestTask\ADV.BadBroker.WebService.csproj", "{8C70DA01-6F4C-46B6-BC9C-993928F39150}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADV.BadBroker.WebService.BL", "ADV.BadBroker.WebService.BL\ADV.BadBroker.WebService.BL.csproj", "{0F528799-4777-4B94-B8C7-C374D1F9C6A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADV.BadBroker.DAL", "ADV.BadBroker.DAL\ADV.BadBroker.DAL.csproj", "{71A6988B-CC4F-4332-A00C-D8AB97CD9D6B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{8C70DA01-6F4C-46B6-BC9C-993928F39150}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C70DA01-6F4C-46B6-BC9C-993928F39150}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C70DA01-6F4C-46B6-BC9C-993928F39150}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F528799-4777-4B94-B8C7-C374D1F9C6A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F528799-4777-4B94-B8C7-C374D1F9C6A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F528799-4777-4B94-B8C7-C374D1F9C6A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F528799-4777-4B94-B8C7-C374D1F9C6A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71A6988B-CC4F-4332-A00C-D8AB97CD9D6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71A6988B-CC4F-4332-A00C-D8AB97CD9D6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71A6988B-CC4F-4332-A00C-D8AB97CD9D6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71A6988B-CC4F-4332-A00C-D8AB97CD9D6B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
