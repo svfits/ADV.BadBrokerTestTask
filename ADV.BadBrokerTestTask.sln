@@ -3,11 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32414.318
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADV.BadBroker.WebService", "ADV.BadBrokerTestTask\ADV.BadBroker.WebService.csproj", "{8C70DA01-6F4C-46B6-BC9C-993928F39150}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ADV.BadBroker.WebService.BL", "ADV.BadBroker.WebService.BL\ADV.BadBroker.WebService.BL.csproj", "{0F528799-4777-4B94-B8C7-C374D1F9C6A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADV.BadBroker.WebService.BL", "ADV.BadBroker.WebService.BL\ADV.BadBroker.WebService.BL.csproj", "{0F528799-4777-4B94-B8C7-C374D1F9C6A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ADV.BadBroker.DAL", "ADV.BadBroker.DAL\ADV.BadBroker.DAL.csproj", "{71A6988B-CC4F-4332-A00C-D8AB97CD9D6B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADV.BadBroker.DAL", "ADV.BadBroker.DAL\ADV.BadBroker.DAL.csproj", "{71A6988B-CC4F-4332-A00C-D8AB97CD9D6B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ADV.BadBroker.WebService", "ADV.BadBroker.WebService\ADV.BadBroker.WebService.csproj", "{9C71B2B3-2E64-441C-95C7-7FA59AE0E29F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADV.BadBroker.WebService.BLTests", "ADV.BadBroker.WebService.BLTests\ADV.BadBroker.WebService.BLTests.csproj", "{488AB9BD-81A2-4D31-866F-9818A05C6638}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1E12A696-9A04-4856-9BCC-AAEF50DBE700}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +22,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8C70DA01-6F4C-46B6-BC9C-993928F39150}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8C70DA01-6F4C-46B6-BC9C-993928F39150}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8C70DA01-6F4C-46B6-BC9C-993928F39150}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8C70DA01-6F4C-46B6-BC9C-993928F39150}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0F528799-4777-4B94-B8C7-C374D1F9C6A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0F528799-4777-4B94-B8C7-C374D1F9C6A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F528799-4777-4B94-B8C7-C374D1F9C6A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -27,6 +30,14 @@ Global
 		{71A6988B-CC4F-4332-A00C-D8AB97CD9D6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71A6988B-CC4F-4332-A00C-D8AB97CD9D6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71A6988B-CC4F-4332-A00C-D8AB97CD9D6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C71B2B3-2E64-441C-95C7-7FA59AE0E29F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C71B2B3-2E64-441C-95C7-7FA59AE0E29F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C71B2B3-2E64-441C-95C7-7FA59AE0E29F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C71B2B3-2E64-441C-95C7-7FA59AE0E29F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{488AB9BD-81A2-4D31-866F-9818A05C6638}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{488AB9BD-81A2-4D31-866F-9818A05C6638}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{488AB9BD-81A2-4D31-866F-9818A05C6638}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{488AB9BD-81A2-4D31-866F-9818A05C6638}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
