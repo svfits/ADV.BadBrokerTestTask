@@ -55,7 +55,7 @@ namespace ADV.BadBroker.WebService.BL.Tests
         }
 
         [TestMethod()]
-        public async Task AccrualTest()
+        public async Task AccrualTest_Debit()
         {
             //arrange
             var writeOff = new WriteOff(db, logger);
