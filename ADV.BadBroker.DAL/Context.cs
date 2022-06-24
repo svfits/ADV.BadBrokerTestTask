@@ -15,4 +15,6 @@ public class Context : DbContext
     public DbSet<User> Users { get; set; }
 
     public DbSet<SettlementAccount> SettlementAccount { get; set; }
+
+    public DbSet<CurrencyReference> CurrencyReference { get; set; }
 }

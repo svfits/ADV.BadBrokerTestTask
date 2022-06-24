@@ -1,10 +1,13 @@
 using ADV.BadBroker.WebService.DTO;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Mime;
 
 namespace ADV.BadBroker.WebService.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [Produces(MediaTypeNames.Application.Json)]
     public class RatesController : ControllerBase
     {
         private readonly ILogger<RatesController> _logger;
@@ -14,27 +17,17 @@ namespace ADV.BadBroker.WebService.Controllers
             _logger = logger;
         }
 
-        [HttpGet(Name = "best")]
-        public IEnumerable<Rate> Get()
+        /// <summary>
+        /// Get sales data
+        /// </summary>
+        /// <param name="startDate">StartDate</param>
+        /// <param name="endDate">EndDate</param>
+        /// <param name="moneyUsd">MoneyUsd</param>
+        /// <returns></returns>
+        [HttpGet("/best")]
+        public async Task<Decimal> GetBest(DateTime startDate, DateTime endDate, Decimal moneyUsd)
         {
-            return new List<Rate>()
-            {
-               new Rate()
-               {
-                   BuyDate = DateTime.Now,
-                   CurrencySum = new List<ÑurrencyRate>()
-                   {
-                       new ÑurrencyRate() { Summ = 45.54m, Ñurrency = Ñurrency.RUB},
-                       new ÑurrencyRate() { Summ = 45.54m, Ñurrency = Ñurrency.GBR},
-                       new ÑurrencyRate() { Summ = 45.54m, Ñurrency = Ñurrency.EUR},
-                       new ÑurrencyRate() { Summ = 45.54m, Ñurrency = Ñurrency.JPY},
-                   },
-                   Date = DateTime.Now,
-                   Revenue = 34.67M,
-                   SellDate = DateTime.Now,
-                   Tool = Ñurrency.RUB,
-               }
-            };
+            return 34.567M;
         }
     }
 }
