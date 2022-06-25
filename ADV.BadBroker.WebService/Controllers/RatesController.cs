@@ -25,9 +25,25 @@ namespace ADV.BadBroker.WebService.Controllers
         /// <param name="moneyUsd">MoneyUsd</param>
         /// <returns></returns>
         [HttpGet("/best")]
-        public async Task<Decimal> GetBest(DateTime startDate, DateTime endDate, Decimal moneyUsd)
+        public Rate GetBest(DateTime startDate, DateTime endDate, Decimal moneyUsd)
         {
-            return 34.567M;
+            var rr = new Rate() 
+            {
+                BuyDate = startDate,
+                SellDate = endDate,
+                Tool = Ñurrency.RUB.ToString(),
+                Revenue = moneyUsd,
+                CurrencySum = new [] { new ÑurrencyRate() 
+                {
+                    Date = startDate,
+                    EUR = moneyUsd,
+                    GBR = moneyUsd,
+                    JPY = moneyUsd,
+                    RUB = moneyUsd,
+                }}
+            };
+
+            return rr;
         }
     }
 }

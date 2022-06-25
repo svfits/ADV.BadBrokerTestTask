@@ -1,8 +1,10 @@
 ﻿
+using ADV.BadBroker.DAL;
+
 namespace ADV.BadBroker.WebService.BL
 {
     public interface IExchangeratesapi
     {
-        Task<Rootobject> GetCurrencyData(DateOnly dateOnly);
+        Task<CurrencyReference> GetCurrencyData(DateOnly dateOnly);
     }
 }

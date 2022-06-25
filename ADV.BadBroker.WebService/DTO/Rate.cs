@@ -1,24 +1,38 @@
-﻿namespace ADV.BadBroker.WebService.DTO
+﻿using Newtonsoft.Json;
+
+namespace ADV.BadBroker.WebService.DTO;
+
+public class Rate
 {
-    public class Rate
-    {
-        public DateTime Date { get; set; }
+    [JsonProperty("ratesgggggggggggggggggg")]
+    public СurrencyRate[] CurrencySum { get; set; }
 
-        public List<СurrencyRate> CurrencySum { get; set; }
+    [JsonProperty("buyDategdfggggggggggggggggg")]
+    public DateTime BuyDate { get; set; }
 
-        public DateTime BuyDate { get; set; }
+    [JsonProperty("sellDate")]
+    public DateTime SellDate { get; set; }
 
-        public DateTime SellDate { get; set; }
+    [JsonProperty("tool")]
+    public string Tool { get; set; }
 
-        public Сurrency Tool { get; set; }
+    [JsonProperty("revenue")]
+    public Decimal Revenue { get; set; }
+}
 
-        public Decimal Revenue { get; set; }
-    }
+public class СurrencyRate
+{
+    public DateTime Date { get; set; }
 
-    public class СurrencyRate
-    {
-        public Сurrency Сurrency { get; set; }
+    [JsonProperty("rub")]
+    public Decimal RUB { get; set; }
 
-        public Decimal Summ { get; set; }
-    }
+    [JsonProperty("eur")]
+    public Decimal EUR { get; set; }
+
+    [JsonProperty("gbr")]
+    public Decimal GBR { get; set; }
+
+    [JsonProperty("jpy")]
+    public Decimal JPY { get; set; }
 }

@@ -1,4 +1,6 @@
-﻿using ADV.BadBroker.WebService.BL.Exceptions;
+﻿using ADV.BadBroker.DAL;
+using ADV.BadBroker.WebService.BL.Exceptions;
+using AutoMapper;
 using Newtonsoft.Json;
 
 namespace ADV.BadBroker.WebService.BL;
@@ -6,10 +8,12 @@ namespace ADV.BadBroker.WebService.BL;
 public class Exchangeratesapi : IExchangeratesapi
 {
     private readonly HttpClient _httpClient;
+    private readonly IMapper _mapper;
 
-    public Exchangeratesapi(HttpClient httpClient)
+    public Exchangeratesapi(HttpClient httpClient, IMapper mapper)
     {
         _httpClient = httpClient;
+        _mapper = mapper;
     }
 
     /// <summary>
@@ -17,7 +21,7 @@ public class Exchangeratesapi : IExchangeratesapi
     /// </summary>
     /// <param name="dateOnly"></param>
     /// <returns></returns>
-    public async Task<Rootobject> GetCurrencyData(DateOnly dateOnly)
+    public async Task<CurrencyReference> GetCurrencyData(DateOnly dateOnly)
     {
         var type = string.Concat("/currency_data/convert?base=USD&symbols=RUB,EUR,GBP,JPY&amount=5&date=", dateOnly);
         var request = new HttpRequestMessage(HttpMethod.Get, type);
@@ -38,7 +42,7 @@ public class Exchangeratesapi : IExchangeratesapi
             throw new ExchangeratesapiException("failed to deserialize object");
         }
 
-        return data;
+        return _mapper.Map<Rootobject, CurrencyReference>(data);
     }
 }
 
