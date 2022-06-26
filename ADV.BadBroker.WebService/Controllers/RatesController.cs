@@ -1,6 +1,7 @@
 using ADV.BadBroker.DAL;
 using ADV.BadBroker.WebService.BL;
 using ADV.BadBroker.WebService.BL.DTO;
+using ADV.BadBroker.WebService.BL.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
 
@@ -26,18 +27,38 @@ namespace ADV.BadBroker.WebService.Controllers
         /// <summary>
         /// Get sales data
         /// </summary>
-        /// <param name="startDate">StartDate</param>
-        /// <param name="endDate">EndDate</param>
-        /// <param name="moneyUsd">MoneyUsd</param>
+        /// <param name="startDate">startDate</param>
+        /// <param name="endDate">endDate</param>
+        /// <param name="moneyUsd">moneyUsd</param>
         /// <returns></returns>
+        /// <response code="200">Returns rate</response>
+        /// <response code="400">Invalid request parameters</response>
+        /// <response code="503">The service for receiving exchange rates is not working</response>
         [HttpGet("/best")]
-        public async Task<Rate> GetBest(DateTime startDate, DateTime endDate, Decimal moneyUsd)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
+        public async Task<ActionResult<Rate>> GetBest(DateTime startDate, DateTime endDate, Decimal moneyUsd)
         {
             //user needs to be obtained from JWT or from authorization
             var user = _context.Users.First();
-            var rate = await _ñalculationService.CalculationAsync(user, DateTime.Now, startDate, endDate, moneyUsd);
-
-            return rate;
+            try
+            {
+                var rate = await _ñalculationService.CalculationAsync(user, DateTime.Now, startDate, endDate, moneyUsd);
+                return rate;
+            }
+            catch (ExchangeratesapiException)
+            {
+                return StatusCode(503);
+            }
+            catch(IntervalDateException)
+            {
+                return StatusCode(400);
+            }
+            catch(LimitPurchasesException)
+            {
+                return StatusCode(401);
+            }
         }
     }
 }

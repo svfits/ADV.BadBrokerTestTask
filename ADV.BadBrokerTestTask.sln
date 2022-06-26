@@ -9,12 +9,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ADV.BadBroker.DAL", "ADV.Ba
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ADV.BadBroker.WebService", "ADV.BadBroker.WebService\ADV.BadBroker.WebService.csproj", "{9C71B2B3-2E64-441C-95C7-7FA59AE0E29F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADV.BadBroker.WebService.BLTests", "ADV.BadBroker.WebService.BLTests\ADV.BadBroker.WebService.BLTests.csproj", "{488AB9BD-81A2-4D31-866F-9818A05C6638}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ADV.BadBroker.WebService.BLTests", "ADV.BadBroker.WebService.BLTests\ADV.BadBroker.WebService.BLTests.csproj", "{488AB9BD-81A2-4D31-866F-9818A05C6638}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1E12A696-9A04-4856-9BCC-AAEF50DBE700}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADV.BadBroker.WebService.IntagrationTests", "ADV.BadBroker.WebService.IntagrationTests\ADV.BadBroker.WebService.IntagrationTests.csproj", "{657F0309-E078-4106-95CD-AC8B10BA5435}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +40,10 @@ Global
 		{488AB9BD-81A2-4D31-866F-9818A05C6638}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{488AB9BD-81A2-4D31-866F-9818A05C6638}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{488AB9BD-81A2-4D31-866F-9818A05C6638}.Release|Any CPU.Build.0 = Release|Any CPU
+		{657F0309-E078-4106-95CD-AC8B10BA5435}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{657F0309-E078-4106-95CD-AC8B10BA5435}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{657F0309-E078-4106-95CD-AC8B10BA5435}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{657F0309-E078-4106-95CD-AC8B10BA5435}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

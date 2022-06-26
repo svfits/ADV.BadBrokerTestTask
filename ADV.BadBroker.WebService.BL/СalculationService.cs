@@ -1,6 +1,7 @@
 ﻿using ADV.BadBroker.DAL;
 using ADV.BadBroker.WebService.BL.DTO;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace ADV.BadBroker.WebService.BL;
@@ -21,7 +22,7 @@ public class СalculationService : IСalculationService
 
     public async Task<Rate> CalculationAsync(User user, DateTime dtNow, DateTime startDate, DateTime endDate, Decimal moneyUsd)
     {
-        _logger.LogInformation("Start Calculation for user { user }", user);
+        _logger.LogInformation("Start Calculation for user { user.Id }", user.Id);
 
         _сalculationServiceHelper.CheckParam(dtNow, startDate, endDate, user);
 
@@ -73,7 +74,7 @@ public class СalculationServiceHelper : IСalculationServiceHelper
     public void CheckParam(DateTime dtNow, DateTime startDate, DateTime endDate, User user)
     {
         var limit = _context.Settings.First();
-        var dateLastpurchase = _context.UserExtradition.First(h => h.User.Id == user.Id).PaymentDate;
+        var dateLastpurchase = _context.UserExtradition.FirstOrDefault(h => h.User.Id == user.Id)?.PaymentDate;
 
         if ((dtNow - dateLastpurchase) < limit.SpecifiedPeriod)
         {
@@ -114,6 +115,7 @@ public class СalculationServiceHelper : IСalculationServiceHelper
 
         var hasAlready = _context.CurrencyReference
             .Where(d => d.Date >= startDateOnly && d.Date <= endDateOnly)
+            .Include(d => d.СurrencyValues)
             .ToHashSet();
             ;
 
