@@ -19,20 +19,42 @@ namespace ADV.BadBroker.WebService.BL
             .ReverseMap();
             ;
 
-            CreateMap<Rates, List<СurrencyValue>>().ConvertUsing(i => СurrencyValueToRates(i));         
+            CreateMap<Rates, List<СurrencyValue>>().ConvertUsing(i => СurrencyValueToRates(i));
             ;
 
             CreateMap<List<СurrencyValue>, Rates>().ConvertUsing(i => RatesToCurrencyValue(i));
+
+            CreateMap<HashSet<CurrencyReference>, DTO.Rates[]>().ConstructUsing(i => ConvertHashSetToRates(i));
         }
 
-        private static Rates RatesToCurrencyValue(List<СurrencyValue> i)
+        private DTO.Rates[] ConvertHashSetToRates(HashSet<CurrencyReference> i)
         {
-            var rates = new Rates() 
+            var rates = new List<DTO.Rates>();
+
+            foreach (var r in i)
             {
-                EUR = (float)i.First(a => a.Сurrency == Сurrency.EUR).Value,
-                GBR = (float)i.First(a => a.Сurrency == Сurrency.GBR).Value,
-                JPY = (float)i.First(a => a.Сurrency == Сurrency.JPY).Value,
-                RUB = (float)i.First(a => a.Сurrency == Сurrency.RUB).Value,
+                var ttt = r.СurrencyValues;
+                rates.Add(new DTO.Rates()
+                {
+                    Date = r.Date.ToDateTime(new TimeOnly(0, 0, 0)),
+                    EUR = ttt.First(a => a.Сurrency == Сurrency.EUR).Value,
+                    GBR = ttt.First(a => a.Сurrency == Сurrency.GBR).Value,
+                    JPY = ttt.First(a => a.Сurrency == Сurrency.JPY).Value,
+                    RUB = ttt.First(a => a.Сurrency == Сurrency.RUB).Value
+                });
+            }
+
+            return rates.ToArray();
+        }
+
+        private static Rates RatesToCurrencyValue(List<СurrencyValue> lsCurrencyValue)
+        {
+            var rates = new Rates()
+            {
+                EUR = (float)lsCurrencyValue.First(a => a.Сurrency == Сurrency.EUR).Value,
+                GBR = (float)lsCurrencyValue.First(a => a.Сurrency == Сurrency.GBR).Value,
+                JPY = (float)lsCurrencyValue.First(a => a.Сurrency == Сurrency.JPY).Value,
+                RUB = (float)lsCurrencyValue.First(a => a.Сurrency == Сurrency.RUB).Value,
             };
 
             return rates;

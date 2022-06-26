@@ -1,4 +1,6 @@
 ﻿using ADV.BadBroker.DAL;
+using ADV.BadBroker.WebService.BL.DTO;
+using AutoMapper;
 using Microsoft.Extensions.Logging;
 
 namespace ADV.BadBroker.WebService.BL;
@@ -7,15 +9,17 @@ public class СalculationService : IСalculationService
 {
     private readonly ILogger<СalculationService> _logger;
     private readonly IСalculationServiceHelper _сalculationServiceHelper;
+    private readonly IMapper _mapper;
     private const int daysBbrokerFee = 1;
 
-    public СalculationService(ILogger<СalculationService> logger, IСalculationServiceHelper сalculationServiceHelper)
+    public СalculationService(ILogger<СalculationService> logger, IСalculationServiceHelper сalculationServiceHelper, IMapper mapper)
     {
         _logger = logger;
         _сalculationServiceHelper = сalculationServiceHelper;
+        _mapper = mapper;
     }
 
-    public async Task CalculationAsync(User user, DateTime dtNow, DateTime startDate, DateTime endDate, Decimal moneyUsd)
+    public async Task<Rate> CalculationAsync(User user, DateTime dtNow, DateTime startDate, DateTime endDate, Decimal moneyUsd)
     {
         _logger.LogInformation("Start Calculation for user { user }", user);
 
@@ -25,20 +29,31 @@ public class СalculationService : IСalculationService
 
         var maxCurrency = coursesReceived
             .SelectMany(g => g.СurrencyValues)
-            .Where(g => g.Сurrency == Сurrency.RUB)
+            .Where(g => g.Сurrency == DAL.Сurrency.RUB)
             .Max(d => d.Value)
             ;
 
         var minCurrency = coursesReceived
             .SelectMany(g => g.СurrencyValues)
-            .Where(g => g.Сurrency == Сurrency.RUB)
+            .Where(g => g.Сurrency == DAL.Сurrency.RUB)
             .Min(d => d.Value)
             ;
 
+        var rates = _mapper.Map<HashSet<CurrencyReference>, DTO.Rates[]>(coursesReceived);
+
         decimal totalDays = (decimal)(endDate - startDate).TotalDays;
-        var revenue = (maxCurrency * moneyUsd / minCurrency) - totalDays * daysBbrokerFee;
+        var revenue = ((maxCurrency * moneyUsd / minCurrency) - totalDays * daysBbrokerFee) - moneyUsd;
 
+        var rate = new Rate()
+        {
+            Tool = DAL.Сurrency.RUB.ToString(),
+            Revenue = revenue,
+            BuyDate = startDate,
+            SellDate = endDate,
+            Rates = rates
+        };
 
+        return rate;
     }
 }
 
@@ -57,19 +72,19 @@ public class СalculationServiceHelper : IСalculationServiceHelper
 
     public void CheckParam(DateTime dtNow, DateTime startDate, DateTime endDate, User user)
     {
-        var specifiedPeriod = _context.Settings.First().SpecifiedPeriod;
+        var limit = _context.Settings.First();
         var dateLastpurchase = _context.UserExtradition.First(h => h.User.Id == user.Id).PaymentDate;
 
-        if ((dtNow - dateLastpurchase) < specifiedPeriod)
+        if ((dtNow - dateLastpurchase) < limit.SpecifiedPeriod)
         {
             _logger.LogError("Limit on the number of purchases");
-            throw new LimitPurchases("Limit on the number of purchases");
+            throw new LimitPurchasesException("Limit on the number of purchases");
         }
 
-        if ((endDate - startDate).TotalDays > 60)
+        if ((endDate - startDate) > limit.LimitHistoricalPeriod)
         {
             _logger.LogError("Interval no more than 60");
-            throw new IntervalDate("Interval no more than 60");
+            throw new IntervalDateException("Interval no more than 60");
         }
     }
 

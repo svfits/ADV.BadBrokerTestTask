@@ -48,6 +48,8 @@ builder.Services.AddAutoMapper(typeof(Mapping));
 builder.Services.AddHostedService<BackgroundWriteOff>();
 
 builder.Services.AddTransient<IWriteOff, WriteOff>();
+builder.Services.AddTransient<IÑalculationService, ÑalculationService>();
+builder.Services.AddTransient<IÑalculationServiceHelper, ÑalculationServiceHelper>();
 
 // here we can connect any database 
 //builder.Services.AddDbContext<Context>(options => options.UseSqlite("Filename=BadBrokerTestTask.db"));

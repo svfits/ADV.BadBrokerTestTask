@@ -1,13 +1,13 @@
 ﻿using Newtonsoft.Json;
 
-namespace ADV.BadBroker.WebService.DTO;
+namespace ADV.BadBroker.WebService.BL.DTO;
 
 public class Rate
 {
-    [JsonProperty("ratesgggggggggggggggggg")]
-    public СurrencyRate[] CurrencySum { get; set; }
+    [JsonProperty("rates")]
+    public Rates[] Rates { get; set; }
 
-    [JsonProperty("buyDategdfggggggggggggggggg")]
+    [JsonProperty("buyDate")]
     public DateTime BuyDate { get; set; }
 
     [JsonProperty("sellDate")]
@@ -20,8 +20,10 @@ public class Rate
     public Decimal Revenue { get; set; }
 }
 
-public class СurrencyRate
+[JsonArray("rates")]
+public class Rates
 {
+    [JsonProperty("date")]
     public DateTime Date { get; set; }
 
     [JsonProperty("rub")]

@@ -16,9 +16,10 @@ using AutoFixture;
 namespace ADV.BadBroker.WebService.BL.Tests
 {
     [TestClass()]
-    public class СalculationServiceTests
+    public class СalculationServiceTests : BaseTest
     {
         private Context db;
+        private Mapper mapper;
 
         [TestInitialize]
         public void Init()
@@ -29,69 +30,14 @@ namespace ADV.BadBroker.WebService.BL.Tests
             .Options;
 
             db = new Context(options);
+
+            mapper = new Mapper(new MapperConfiguration(c => { c.AddProfile<Mapping>(); }));
         }
 
         [TestMethod()]
         public async Task Calculation_Revenue()
         {
             ///arrange
-            var listRef = new List<CurrencyReference>(){
-                new CurrencyReference() {
-                Date = new DateOnly(2014, 12, 15),
-                СurrencyValues = new List<СurrencyValue>
-                {
-                    new СurrencyValue() { Сurrency = Сurrency.RUB, Value = 60.17m}
-                }},
-                new CurrencyReference() {
-                Date = new DateOnly(2014, 12, 16),
-                СurrencyValues = new List<СurrencyValue>
-                {
-                    new СurrencyValue() { Сurrency = Сurrency.RUB, Value = 72.99m}
-                }},
-                new CurrencyReference() {
-                Date = new DateOnly(2014, 12, 17),
-                СurrencyValues = new List<СurrencyValue>
-                {
-                    new СurrencyValue() { Сurrency = Сurrency.RUB, Value = 66.01m}
-                }},
-                new CurrencyReference() {
-                Date = new DateOnly(2014, 12, 18),
-                СurrencyValues = new List<СurrencyValue>
-                {
-                    new СurrencyValue() { Сurrency = Сurrency.RUB, Value = 61.44m}
-                }},
-                new CurrencyReference() {
-                Date = new DateOnly(2014, 12, 19),
-                СurrencyValues = new List<СurrencyValue>
-                {
-                    new СurrencyValue() { Сurrency = Сurrency.RUB, Value = 59.79m}
-                }},
-                new CurrencyReference() {
-                Date = new DateOnly(2014, 12, 20),
-                СurrencyValues = new List<СurrencyValue>
-                {
-                    new СurrencyValue() { Сurrency = Сurrency.RUB, Value = 59.79m}
-                }},
-                new CurrencyReference() {
-                Date = new DateOnly(2014, 12, 21),
-                СurrencyValues = new List<СurrencyValue>
-                {
-                    new СurrencyValue() { Сurrency = Сurrency.RUB, Value = 59.79m}
-                }},
-                new CurrencyReference() {
-                Date = new DateOnly(2014, 12, 22),
-                СurrencyValues = new List<СurrencyValue>
-                {
-                    new СurrencyValue() { Сurrency = Сurrency.RUB, Value = 54.78m}
-                }},
-                new CurrencyReference() {
-                Date = new DateOnly(2014, 12, 22),
-                СurrencyValues = new List<СurrencyValue>
-                {
-                    new СurrencyValue() { Сurrency = Сurrency.RUB, Value = 54.80m}
-                }},
-            };
-
             var fixture = new Fixture();
             var user = fixture.Create<User>();
 
@@ -106,14 +52,23 @@ namespace ADV.BadBroker.WebService.BL.Tests
 
             var exchangeratesapi = new Mock<IСalculationServiceHelper>();
             exchangeratesapi.Setup(y => y.GetDataAsync(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
-                .ReturnsAsync(new HashSet<CurrencyReference>(listRef));
+                .ReturnsAsync(new HashSet<CurrencyReference>(ListCurrencyReference));
 
             exchangeratesapi.Setup(y => y.CheckParam(It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), user));
 
-            var сalculationService = new СalculationService(logger, exchangeratesapi.Object);
-            await сalculationService.CalculationAsync(user, dtNow, startDate, endDate, moneyUsed);
+            var сalculationService = new СalculationService(logger, exchangeratesapi.Object, mapper);
 
-            
+            //action
+            var output = await сalculationService.CalculationAsync(user, dtNow, startDate, endDate, moneyUsed);
+
+            //assert
+            Assert.IsNotNull(output);
+            Assert.AreEqual(endDate, output.SellDate);
+            Assert.AreEqual(startDate, output.BuyDate);
+            Assert.AreEqual("RUB", output.Tool);
+            decimal revenue = 27.258783297622983m;
+            decimal delta = 0.05m;
+            Assert.AreEqual(revenue, output.Revenue, delta);
         }
     }
 }

@@ -1,4 +1,6 @@
-using ADV.BadBroker.WebService.DTO;
+using ADV.BadBroker.DAL;
+using ADV.BadBroker.WebService.BL;
+using ADV.BadBroker.WebService.BL.DTO;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
 
@@ -11,10 +13,14 @@ namespace ADV.BadBroker.WebService.Controllers
     public class RatesController : ControllerBase
     {
         private readonly ILogger<RatesController> _logger;
+        private readonly IÑalculationService _ñalculationService;
+        private readonly Context _context;
 
-        public RatesController(ILogger<RatesController> logger)
+        public RatesController(ILogger<RatesController> logger, IÑalculationService ñalculationService, Context context)
         {
             _logger = logger;
+            _ñalculationService = ñalculationService;
+            _context = context;
         }
 
         /// <summary>
@@ -25,25 +31,13 @@ namespace ADV.BadBroker.WebService.Controllers
         /// <param name="moneyUsd">MoneyUsd</param>
         /// <returns></returns>
         [HttpGet("/best")]
-        public Rate GetBest(DateTime startDate, DateTime endDate, Decimal moneyUsd)
+        public async Task<Rate> GetBest(DateTime startDate, DateTime endDate, Decimal moneyUsd)
         {
-            var rr = new Rate() 
-            {
-                BuyDate = startDate,
-                SellDate = endDate,
-                Tool = Ñurrency.RUB.ToString(),
-                Revenue = moneyUsd,
-                CurrencySum = new [] { new ÑurrencyRate() 
-                {
-                    Date = startDate,
-                    EUR = moneyUsd,
-                    GBR = moneyUsd,
-                    JPY = moneyUsd,
-                    RUB = moneyUsd,
-                }}
-            };
+            //user needs to be obtained from JWT or from authorization
+            var user = _context.Users.First();
+            var rate = await _ñalculationService.CalculationAsync(user, DateTime.Now, startDate, endDate, moneyUsd);
 
-            return rr;
+            return rate;
         }
     }
 }

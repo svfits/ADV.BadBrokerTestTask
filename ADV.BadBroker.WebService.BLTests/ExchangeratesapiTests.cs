@@ -48,7 +48,7 @@ namespace ADV.BadBroker.WebService.BL.Tests
 
         [TestMethod()]
         [ExpectedException(typeof(ExchangeratesapiException))]
-        public async Task GetCurrencyDataTest()
+        public async Task GetCurrencyData_ExpectedException()
         {
             //arrange
             var exchangeratesapi = new Exchangeratesapi(httpClient, mapper);
@@ -60,7 +60,7 @@ namespace ADV.BadBroker.WebService.BL.Tests
         }
 
         [TestMethod()]
-        public async Task GetCurrencyDataTest_Ok()
+        public async Task GetCurrencyDataTest_returnOk()
         {
             //arrange
             var dt = new DateOnly(2022, 6, 23);
