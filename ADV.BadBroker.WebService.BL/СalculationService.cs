@@ -83,8 +83,8 @@ public class СalculationServiceHelper : IСalculationServiceHelper
 
         if ((endDate - startDate) > limit.LimitHistoricalPeriod)
         {
-            _logger.LogError("Interval no more than 60");
-            throw new IntervalDateException("Interval no more than 60");
+            _logger.LogError("Interval no more than {limit.LimitHistoricalPeriod}", limit.LimitHistoricalPeriod);
+            throw new IntervalDateException($"Interval no more than {limit.LimitHistoricalPeriod}");
         }
     }
 
@@ -99,36 +99,37 @@ public class СalculationServiceHelper : IСalculationServiceHelper
         var startDateOnly = DateOnly.FromDateTime(startDate);
         var endDateOnly = DateOnly.FromDateTime(endDate);
 
+        int countDays = (int)(endDate - startDate).TotalDays;
+
         var days = new HashSet<DateOnly>(capacity: 60)
         {
             startDateOnly,
         };
 
-        for (int i = 0; i <= 60; i++)
+        for (int i = 0; i < countDays; i++)
         {
-            days.Add(DateOnly.FromDateTime(startDate.AddDays(i)));
+            var dd = DateOnly.FromDateTime(startDate.AddDays(i));
+            days.Add(dd);
         }
 
         var hasAlready = _context.CurrencyReference
-            .Where(d => d.Date > startDateOnly && d.Date < endDateOnly)
+            .Where(d => d.Date >= startDateOnly && d.Date <= endDateOnly)
+            .ToHashSet();
             ;
 
         var lacksCourses = days.Except(hasAlready.Select(h => h.Date));
-
-        var coursesReceived = new HashSet<CurrencyReference>(capacity: 60);
+                
         foreach (var day in lacksCourses)
         {
             var coursesExchangeratesapi = await _exchangeratesapi.GetCurrencyData(day);
 
-
-            coursesReceived.Add(coursesExchangeratesapi);
+            hasAlready.Add(coursesExchangeratesapi);
 
             await _context.CurrencyReference.AddAsync(coursesExchangeratesapi);
         }
 
         await _context.SaveChangesAsync();
 
-        coursesReceived.Union(hasAlready);
-        return coursesReceived;
+        return hasAlready;
     }
 }

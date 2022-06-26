@@ -90,7 +90,7 @@ namespace ADV.BadBroker.WebService.BL.Tests
                     new СurrencyValue() { Сurrency = Сurrency.USD, Value = 60.17m},
                 }},
                 new CurrencyReference() {
-                Date = new DateOnly(2014, 12, 22),
+                Date = new DateOnly(2014, 12, 23),
                 СurrencyValues = new List<СurrencyValue>
                 {
                     new СurrencyValue() { Сurrency = Сurrency.RUB, Value = 54.80m},

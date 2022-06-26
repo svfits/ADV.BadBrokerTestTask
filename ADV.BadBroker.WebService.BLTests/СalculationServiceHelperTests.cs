@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Moq;
 using Microsoft.Extensions.Logging;
 using AutoFixture;
+using FluentAssertions;
 
 namespace ADV.BadBroker.WebService.BL.Tests
 {
@@ -82,6 +83,65 @@ namespace ADV.BadBroker.WebService.BL.Tests
 
             //action
             сalculationServiceHelper.CheckParam(dtNow, startDate, endDate, user);
+        }
+
+        [TestMethod()]
+        public async Task GetDataAsyncTest_AllValuesInDb()
+        {
+            //arrange
+            var startDate = new DateTime(2014, 12, 16);
+            var endDate = startDate.AddDays(6);
+
+            await db.CurrencyReference.AddRangeAsync(ListCurrencyReference);
+            await db.SaveChangesAsync();
+
+            var exchangeratesapiMock = new Mock<IExchangeratesapi>();
+            var сalculationServiceHelper = new СalculationServiceHelper(logger, db, exchangeratesapiMock.Object);
+
+            //action
+            var output = await сalculationServiceHelper.GetDataAsync(startDate, endDate);
+
+            //assert
+            output.Should()
+                .NotBeNullOrEmpty()
+                .And.HaveCount(7)
+                .And.OnlyHaveUniqueItems()
+                .And.Contain(t => t.Date == DateOnly.FromDateTime(startDate))
+                .And.Contain(t => t.Date == DateOnly.FromDateTime(endDate))
+                ;
+        }
+
+        [TestMethod()]
+        public async Task GetDataAsyncTest_ValuesInDb_Exchangeratesapi()
+        {
+            //arrange
+            var startDate = new DateTime(2014, 12, 16);
+            var endDate = startDate.AddDays(6);
+            var insertData = new DateOnly(2014, 12, 18);
+
+            var missingFromCache = ListCurrencyReference;
+            missingFromCache.RemoveAt(3);
+
+            await db.CurrencyReference.AddRangeAsync(missingFromCache);
+            await db.SaveChangesAsync();
+
+            var exchangeratesapiMock = new Mock<IExchangeratesapi>();
+            exchangeratesapiMock.Setup(g => g.GetCurrencyData(insertData))
+                .ReturnsAsync(new CurrencyReference() { Date = insertData });
+            var сalculationServiceHelper = new СalculationServiceHelper(logger, db, exchangeratesapiMock.Object);
+
+            //action
+            var output = await сalculationServiceHelper.GetDataAsync(startDate, endDate);
+
+            //assert
+            output.Should()
+                .NotBeNullOrEmpty()
+                .And.HaveCount(7)
+                .And.OnlyHaveUniqueItems()
+                .And.Contain(t => t.Date == insertData)
+                .And.Contain(t => t.Date == DateOnly.FromDateTime(startDate))
+                .And.Contain(t => t.Date == DateOnly.FromDateTime(endDate))
+                ;
         }
     }
 }
