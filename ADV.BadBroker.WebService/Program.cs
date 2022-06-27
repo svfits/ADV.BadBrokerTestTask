@@ -1,6 +1,7 @@
 using ADV.BadBroker.DAL;
 using ADV.BadBroker.WebService.BackgroundServices;
 using ADV.BadBroker.WebService.BL;
+using ADV.BadBroker.WebService.BL.ParametrsRate;
 using Hellang.Middleware.ProblemDetails;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -60,16 +61,10 @@ builder.Services.AddDbContext<ADV.BadBroker.DAL.Context>(options => options.UseI
 
 AddUserForTest(builder.Services);
 
-var url = builder.Configuration.GetSection("Urls");
-var keys = builder.Configuration.GetSection("Keys");
+builder.Services.Configure<ParametrsRates>(builder.Configuration.GetSection("ParametrsRates"));
 
 //we do this for all requests, we use a pull
-builder.Services.AddHttpClient<IExchangeratesapi, Exchangeratesapi>("", client =>
-{
-    client.BaseAddress = new Uri(url["ExchangeratesapiUrl"]);
-    client.DefaultRequestHeaders.Add("Accept", "application/json");
-    client.DefaultRequestHeaders.Add("apikey", keys["ExchangeratesapiKey"]);
-})
+builder.Services.AddHttpClient<IExchangeratesapi, Exchangeratesapi>()
 .AddPolicyHandler(GetRetryPolicy());
 
 //Polly is a .NET library that provides failover and transient failure handling capabilities.
@@ -100,7 +95,7 @@ app.Run();
 /// <summary>
 /// add one user for testing
 /// </summary>
-void AddUserForTest(IServiceCollection services)
+static void AddUserForTest(IServiceCollection services)
 {
     var sp = services.BuildServiceProvider();
     using var scope = sp.CreateScope();

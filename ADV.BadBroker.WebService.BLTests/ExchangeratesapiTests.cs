@@ -1,8 +1,10 @@
 ﻿using ADV.BadBroker.DAL;
 using ADV.BadBroker.WebService.BL.Exceptions;
+using ADV.BadBroker.WebService.BL.ParametrsRate;
 using AutoFixture;
 using AutoMapper;
 using FluentAssertions;
+using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.Protected;
@@ -16,6 +18,7 @@ namespace ADV.BadBroker.WebService.BL.Tests
     {
         private Mapper mapper;
         private HttpClient httpClient;
+        private Mock<IOptionsSnapshot<ParametrsRates>> optionsmock;
 
         [TestInitialize]
         public void Init()
@@ -31,6 +34,15 @@ namespace ADV.BadBroker.WebService.BL.Tests
                 });
 
             httpClient = new HttpClient(mockMessageHandler.Object) { BaseAddress = new Uri("http://localhost/") };
+
+            var op = new ParametrsRates
+            {
+                ExchangeratesapiKey = "key",
+                ExchangeratesapiUrl = "https://localhost"
+            };
+
+            optionsmock = new Mock<IOptionsSnapshot<ParametrsRates>>();
+            optionsmock.Setup(m => m.Value).Returns(op);
         }
 
         [TestMethod()]
@@ -38,7 +50,7 @@ namespace ADV.BadBroker.WebService.BL.Tests
         public async Task GetCurrencyDataTest_InternalServerError()
         {
             //arrange
-            var exchangeratesapi = new Exchangeratesapi(httpClient, mapper);
+            var exchangeratesapi = new Exchangeratesapi(httpClient, mapper, optionsmock.Object);
 
             var dt = new DateOnly(2022, 6, 23);
 
@@ -51,7 +63,7 @@ namespace ADV.BadBroker.WebService.BL.Tests
         public async Task GetCurrencyData_ExpectedException()
         {
             //arrange
-            var exchangeratesapi = new Exchangeratesapi(httpClient, mapper);
+            var exchangeratesapi = new Exchangeratesapi(httpClient, mapper, optionsmock.Object);
 
             var dt = new DateOnly(2022, 6, 23);
 
@@ -81,7 +93,7 @@ namespace ADV.BadBroker.WebService.BL.Tests
 
             var httpClient = new HttpClient(mockMessageHandler.Object) { BaseAddress = new Uri("http://localhost/") };
 
-            var exchangeratesapi = new Exchangeratesapi(httpClient, mapper);
+            var exchangeratesapi = new Exchangeratesapi(httpClient, mapper, optionsmock.Object);
 
             //action
             var output = await exchangeratesapi.GetCurrencyData(dt);
