@@ -3,12 +3,16 @@
 Read pdf file.
 
 ## Setup
+Set data look 
+startDate = 2014-12-16T02:28:26.969Z
+endDate = 2014-12-22T02:28:26.969Z
 
-Запускаем тесты
+![Set data look](https://github.com/svfits/ADV.BadBrokerTestTask/blob/master/Screenshot/Parametrs%20date.JPG)
+
 
 ## Result
 
-![Результат выполнения тестов](https://github.com/svfits/LineAdjustment/blob/dev/LineAdjustment/Screenshot/Tests.JPG)
+![look what came](https://github.com/svfits/ADV.BadBrokerTestTask/blob/master/Screenshot/Return%20data.JPG)
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
