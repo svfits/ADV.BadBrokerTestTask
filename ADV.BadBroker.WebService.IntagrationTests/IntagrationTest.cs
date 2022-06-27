@@ -28,7 +28,7 @@ namespace ADV.BadBroker.WebService.IntagrationTests
                        services.Remove(descriptor);
                        dataBaseName = Guid.NewGuid().ToString();
 
-                       services.AddDbContext<Context>(options => options.UseInMemoryDatabase(databaseName: dataBaseName));
+                       services.AddDbContext<Context>(options => options.UseInMemoryDatabase(databaseName: "InMemoryDatabase"));
 
                        var sp = services.BuildServiceProvider();
 
@@ -56,7 +56,6 @@ namespace ADV.BadBroker.WebService.IntagrationTests
             var url = string.Concat("best/?startDate=", startdate, "&endDate=", endDate, "&moneyUsd=", moneyUsd);
 
             //action
-            //https://localhost:7126/best?startDate=2022-06-26T15%3A23%3A23.730Z&endDate=2022-06-26T15%3A23%3A23.730Z&moneyUsd=333'
             var result = await TestClient.GetAsync(url);
 
             //Assert
